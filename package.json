@@ -1,0 +1,78 @@
+{
+  "name": "tradestation-api-ts",
+  "version": "1.0.0",
+  "description": "A comprehensive TypeScript wrapper for TradeStation WebAPI v3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --pretty --listEmittedFiles",
+    "build:examples": "tsc -p tsconfig.examples.json --pretty --listEmittedFiles",
+    "build:all": "npm run build && npm run build:examples",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\" \"examples/**/*.ts\"",
+    "prepare": "npm run build:all",
+    "example:marketData:quotes": "ts-node examples/MarketData/streamQuotes.ts",
+    "example:marketData:bars": "ts-node examples/MarketData/streamBars.ts",
+    "example:marketData:optionQuotes": "ts-node examples/MarketData/streamOptionQuotes.ts",
+    "example:marketData:optionChain": "ts-node examples/MarketData/streamOptionChain.ts",
+    "example:marketData:marketDepth": "ts-node examples/MarketData/streamMarketDepth.ts",
+    "example:marketData:marketDepthAggregates": "ts-node examples/MarketData/streamMarketDepthAggregates.ts",
+    "example:marketData:symbolDetails": "ts-node examples/MarketData/getSymbolDetails.ts",
+    "example:marketData:quoteSnapshots": "ts-node examples/MarketData/getQuoteSnapshots.ts",
+    "example:marketData:optionStrikes": "ts-node examples/MarketData/getOptionStrikes.ts",
+    "example:orderExecution:placeOrder": "ts-node examples/OrderExecution/placeOrder.ts",
+    "example:orderExecution:placeGroupOrder": "ts-node examples/OrderExecution/placeGroupOrder.ts",
+    "example:orderExecution:confirmOrder": "ts-node examples/OrderExecution/confirmOrder.ts",
+    "example:orderExecution:confirmGroupOrder": "ts-node examples/OrderExecution/confirmGroupOrder.ts",
+    "example:orderExecution:cancelOrder": "ts-node examples/OrderExecution/cancelOrder.ts",
+    "example:orderExecution:replaceOrder": "ts-node examples/OrderExecution/replaceOrder.ts",
+    "example:orderExecution:getRoutes": "ts-node examples/OrderExecution/getRoutes.ts",
+    "example:orderExecution:getOrdersById": "ts-node examples/OrderExecution/getOrdersById.ts",
+    "example:orderExecution:getActivationTriggers": "ts-node examples/OrderExecution/getActivationTriggers.ts",
+    "example:orderExecution:streamOrders": "ts-node examples/OrderExecution/streamOrders.ts",
+    "example:brokerage:getBalances": "ts-node examples/Brokerage/getBalances.ts"
+  },
+  "keywords": [
+    "tradestation",
+    "api",
+    "trading",
+    "market-data",
+    "stocks",
+    "options",
+    "typescript",
+    "webapi",
+    "brokerage",
+    "financial"
+  ],
+  "author": "mxcoppell",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mxcoppell/tradestation-api-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mxcoppell/tradestation-api-ts/issues"
+  },
+  "homepage": "https://github.com/mxcoppell/tradestation-api-ts#readme",
+  "dependencies": {
+    "@types/dotenv": "^6.1.1",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.7",
+    "events": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

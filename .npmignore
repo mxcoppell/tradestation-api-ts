@@ -1,0 +1,38 @@
+# Source
+src/
+examples/
+tests/
+
+# Config files
+.eslintrc
+.prettierrc
+jest.config.js
+tsconfig.json
+tsconfig.examples.json
+
+# Development files
+.env*
+.env.local*
+.cursorrules
+.cursor
+.vscode/
+.idea/
+.git/
+.gitignore
+
+# Build artifacts
+coverage/
+dist-examples/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db 
