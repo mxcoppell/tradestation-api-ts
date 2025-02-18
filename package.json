@@ -1,6 +1,6 @@
 {
   "name": "tradestation-api-ts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A comprehensive TypeScript wrapper for TradeStation WebAPI v3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

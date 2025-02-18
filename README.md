@@ -25,6 +25,136 @@ This project provides a complete TypeScript implementation of the TradeStation W
 npm install tradestation-api-ts
 ```
 
+## Usage
+
+### Basic Setup
+
+```typescript
+import { TradeStationClient } from 'tradestation-api-ts';
+
+// Initialize with environment variables
+const client = new TradeStationClient();
+
+// Or with explicit configuration
+const client = new TradeStationClient({
+    clientId: 'your_client_id',
+    clientSecret: 'your_client_secret',
+    username: 'your_username',
+    password: 'your_password',
+    environment: 'Simulation'  // or 'Live'
+});
+```
+
+### Market Data
+
+```typescript
+// Get quote snapshots
+const quotes = await client.marketData.getQuoteSnapshots(['MSFT', 'AAPL']);
+
+// Stream real-time quotes
+const stream = await client.marketData.streamQuotes(['MSFT', 'AAPL']);
+stream.on('data', (quote) => {
+    console.log('Quote update:', quote);
+});
+
+// Get historical bars
+const bars = await client.marketData.getBarHistory('MSFT', {
+    interval: '1',
+    unit: 'Minute',
+    barsback: 100
+});
+```
+
+### Order Execution
+
+```typescript
+// Place a market order
+const order = await client.orderExecution.placeOrder({
+    AccountID: 'your_account_id',
+    Symbol: 'MSFT',
+    Quantity: '100',
+    OrderType: 'Market',
+    TradeAction: 'Buy',
+    TimeInForce: { Duration: 'DAY' },
+    Route: 'Intelligent'
+});
+
+// Place a bracket order
+const bracketOrder = await client.orderExecution.placeGroupOrder({
+    Type: 'BRK',
+    Orders: [
+        {
+            AccountID: 'your_account_id',
+            Symbol: 'MSFT',
+            Quantity: '100',
+            OrderType: 'Market',
+            TradeAction: 'Buy',
+            TimeInForce: { Duration: 'DAY' }
+        },
+        {
+            AccountID: 'your_account_id',
+            Symbol: 'MSFT',
+            Quantity: '100',
+            OrderType: 'Limit',
+            LimitPrice: '160.00',
+            TradeAction: 'Sell',
+            TimeInForce: { Duration: 'GTC' }
+        },
+        {
+            AccountID: 'your_account_id',
+            Symbol: 'MSFT',
+            Quantity: '100',
+            OrderType: 'StopMarket',
+            StopPrice: '145.00',
+            TradeAction: 'Sell',
+            TimeInForce: { Duration: 'GTC' }
+        }
+    ]
+});
+```
+
+### Brokerage
+
+```typescript
+// Get accounts
+const accounts = await client.brokerage.getAccounts();
+
+// Get positions
+const positions = await client.brokerage.getPositions('your_account_id');
+
+// Stream position updates
+const positionStream = await client.brokerage.streamPositions('your_account_id');
+positionStream.on('data', (position) => {
+    console.log('Position update:', position);
+});
+```
+
+### Error Handling
+
+```typescript
+try {
+    const quotes = await client.marketData.getQuoteSnapshots(['INVALID']);
+} catch (error) {
+    if (error.name === 'ValidationError') {
+        console.error('Invalid input:', error.message);
+    } else if (error.name === 'ApiError') {
+        console.error('API error:', error.message);
+    } else {
+        console.error('Unknown error:', error);
+    }
+}
+```
+
+### Resource Cleanup
+
+```typescript
+// Close specific stream
+stream.emit('close');
+
+// Close all active streams
+client.closeAllStreams();
+```
+
 ## Quick Start
 
 1. Create a `.env.local` file with your TradeStation API credentials:
@@ -94,9 +224,53 @@ quoteStream.on('data', (quote) => {
 - Complex order types
 - OCO and bracket orders
 
-## Running Examples
+## Local Development
 
-The project includes comprehensive examples for all API functionalities. Use the provided script to run examples:
+### Prerequisites
+- Node.js (>=14.0.0)
+- npm or yarn
+- Git
+
+### Clone and Setup
+```bash
+# Clone the repository
+git clone https://github.com/mxcoppell/tradestation-api-ts.git
+cd tradestation-api-ts
+
+# Install dependencies
+npm install
+
+# Create local environment file
+cp .env.local.sample .env.local
+# Edit .env.local with your TradeStation API credentials
+```
+
+### Build
+```bash
+# Build the library
+npm run build
+
+# Build examples
+npm run build:examples
+
+# Build both library and examples
+npm run build:all
+```
+
+### Test
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+### Run Examples
+The project includes a helper script to run examples:
 
 ```bash
 # List all available examples
@@ -108,6 +282,14 @@ The project includes comprehensive examples for all API functionalities. Use the
 # Run multiple examples
 ./run-example.sh MarketData/getBars MarketData/getQuotes
 ```
+
+### Development Workflow
+1. Make your changes in the `src` directory
+2. Add or update tests in `src/**/__tests__`
+3. Run tests to ensure everything works
+4. Build the project to check for compilation errors
+5. Try your changes using the examples
+6. Submit a pull request with your changes
 
 ## Documentation
 

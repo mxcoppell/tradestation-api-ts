@@ -1,8 +1,8 @@
 import { BrokerageService } from '../../BrokerageService';
-import { HistoricalOrdersById, HistoricalOrder, OrderLeg } from '../../../types/brokerage';
 import { createMockHttpClient, createMockStreamManager, createAxiosResponse } from '../../testUtils';
 import { HttpClient } from '../../../client/HttpClient';
 import { StreamManager } from '../../../streaming/StreamManager';
+import { HistoricalOrdersById } from '../../../types/brokerage';
 
 describe('BrokerageService - Get Historical Orders By Order ID', () => {
     let brokerageService: BrokerageService;
@@ -29,46 +29,38 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     OrderID: 'ORDER123',
                     Status: 'FLL',
                     StatusDescription: 'Filled',
-                    OpenedDateTime: validDate.toISOString(),
+                    OpenedDateTime: '2025-01-19T10:00:00Z',
                     OrderType: 'Market',
                     Duration: 'DAY',
-                    Legs: [
-                        {
-                            AssetType: 'STOCK',
-                            BuyOrSell: 'Buy',
-                            ExecQuantity: '100',
-                            ExecutionPrice: '150.00',
-                            OpenOrClose: 'Open',
-                            QuantityOrdered: '100',
-                            QuantityRemaining: '0',
-                            Symbol: 'MSFT'
-                        }
-                    ]
+                    Legs: [{
+                        AssetType: 'STOCK',
+                        BuyOrSell: 'Buy',
+                        ExecQuantity: '100',
+                        ExecutionPrice: '150.00',
+                        OpenOrClose: 'Open',
+                        QuantityOrdered: '100',
+                        QuantityRemaining: '0',
+                        Symbol: 'AAPL'
+                    }]
                 },
                 {
                     AccountID: '789012',
                     OrderID: 'ORDER456',
                     Status: 'CAN',
-                    StatusDescription: 'Canceled',
-                    OpenedDateTime: '2024-01-19T11:00:00Z',
-                    OrderType: 'Limit',
-                    Duration: 'GTC',
-                    Legs: [
-                        {
-                            AssetType: 'STOCKOPTION',
-                            BuyOrSell: 'Buy',
-                            ExecQuantity: '0',
-                            ExecutionPrice: '0.00',
-                            ExpirationDate: '2024-02-16',
-                            OpenOrClose: 'Open',
-                            OptionType: 'CALL',
-                            QuantityOrdered: '1',
-                            QuantityRemaining: '1',
-                            StrikePrice: '155.00',
-                            Symbol: 'MSFT 240216C155',
-                            Underlying: 'MSFT'
-                        }
-                    ]
+                    StatusDescription: 'Cancelled',
+                    OpenedDateTime: '2025-01-19T10:00:00Z',
+                    OrderType: 'Market',
+                    Duration: 'DAY',
+                    Legs: [{
+                        AssetType: 'STOCK',
+                        BuyOrSell: 'Buy',
+                        ExecQuantity: '0',
+                        ExecutionPrice: '0.00',
+                        OpenOrClose: 'Open',
+                        QuantityOrdered: '100',
+                        QuantityRemaining: '100',
+                        Symbol: 'AAPL'
+                    }]
                 }
             ]
         };
@@ -78,14 +70,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             '123456,789012',
             'ORDER123,ORDER456',
-            validDateStr
+            '2025-01-19'
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456,789012/historicalorders/ORDER123,ORDER456',
             {
                 params: {
-                    since: '2025-01-18'
+                    since: '2025-01-19'
                 }
             }
         );
@@ -99,21 +91,19 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     OrderID: 'ORDER123',
                     Status: 'FLL',
                     StatusDescription: 'Filled',
-                    OpenedDateTime: validDate.toISOString(),
+                    OpenedDateTime: '2025-01-19T10:00:00Z',
                     OrderType: 'Market',
                     Duration: 'DAY',
-                    Legs: [
-                        {
-                            AssetType: 'STOCK',
-                            BuyOrSell: 'Buy',
-                            ExecQuantity: '100',
-                            ExecutionPrice: '150.00',
-                            OpenOrClose: 'Open',
-                            QuantityOrdered: '100',
-                            QuantityRemaining: '0',
-                            Symbol: 'MSFT'
-                        }
-                    ]
+                    Legs: [{
+                        AssetType: 'STOCK',
+                        BuyOrSell: 'Buy',
+                        ExecQuantity: '100',
+                        ExecutionPrice: '150.00',
+                        OpenOrClose: 'Open',
+                        QuantityOrdered: '100',
+                        QuantityRemaining: '0',
+                        Symbol: 'AAPL'
+                    }]
                 }
             ]
         };
@@ -123,14 +113,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             '123456',
             'ORDER123',
-            validDateStr
+            '2025-01-19'
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-18'
+                    since: '2025-01-19'
                 }
             }
         );
@@ -144,7 +134,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     AccountID: 'INVALID',
                     OrderID: 'ORDER123',
                     Error: 'INVALID_ACCOUNT',
-                    Message: 'Account not found'
+                    Message: 'Invalid account ID'
                 }
             ]
         };
@@ -154,14 +144,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             'INVALID',
             'ORDER123',
-            validDateStr
+            '2025-01-19'
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/INVALID/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-18'
+                    since: '2025-01-19'
                 }
             }
         );
@@ -175,7 +165,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     AccountID: '123456',
                     OrderID: 'INVALID',
                     Error: 'INVALID_ORDER',
-                    Message: 'Order not found'
+                    Message: 'Invalid order ID'
                 }
             ]
         };
@@ -185,14 +175,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             '123456',
             'INVALID',
-            validDateStr
+            '2025-01-19'
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456/historicalorders/INVALID',
             {
                 params: {
-                    since: '2025-01-18'
+                    since: '2025-01-19'
                 }
             }
         );
@@ -201,14 +191,18 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
     it('should handle network errors', async () => {
         mockHttpClient.get.mockRejectedValueOnce(new Error('Network error'));
 
-        await expect(brokerageService.getHistoricalOrdersByOrderID('123456', 'ORDER123', validDateStr))
+        await expect(brokerageService.getHistoricalOrdersByOrderID(
+            '123456',
+            'ORDER123',
+            '2025-01-19'
+        ))
             .rejects
             .toThrow('Network error');
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-18'
+                    since: '2025-01-19'
                 }
             }
         );
@@ -217,14 +211,18 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
     it('should handle unauthorized access', async () => {
         mockHttpClient.get.mockRejectedValueOnce(new Error('Unauthorized'));
 
-        await expect(brokerageService.getHistoricalOrdersByOrderID('123456', 'ORDER123', validDateStr))
+        await expect(brokerageService.getHistoricalOrdersByOrderID(
+            '123456',
+            'ORDER123',
+            '2025-01-19'
+        ))
             .rejects
             .toThrow('Unauthorized');
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-18'
+                    since: '2025-01-19'
                 }
             }
         );
