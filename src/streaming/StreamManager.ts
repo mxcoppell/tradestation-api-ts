@@ -109,10 +109,10 @@ export class StreamManager {
     }
 
     closeAllStreams(): void {
-        for (const [streamId, emitter] of this.streams.entries()) {
+        Array.from(this.streams.entries()).forEach(([streamId, emitter]) => {
             emitter.emit('close');
             this.closeStream(streamId);
-        }
+        });
     }
 
     getActiveStreams(): string[] {
