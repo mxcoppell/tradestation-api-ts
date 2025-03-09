@@ -11,8 +11,7 @@ NC='\033[0m' # No Color
 REQUIRED_ENV_VARS=(
     "CLIENT_ID"
     "CLIENT_SECRET"
-    "USERNAME"
-    "PASSWORD"
+    "REFRESH_TOKEN"
     "ENVIRONMENT"
 )
 
@@ -48,7 +47,7 @@ check_env_vars() {
     if [ ${#missing_vars[@]} -ne 0 ]; then
         echo -e "${RED}Error: Missing required environment variables:${NC}"
         printf '  %s\n' "${missing_vars[@]}"
-        echo -e "\nPlease set these variables in your ${YELLOW}.env.local${NC} file."
+        echo -e "\nPlease set these variables in your ${YELLOW}.env${NC} file."
         return 1
     fi
     return 0
@@ -103,14 +102,14 @@ if [ "$1" = "-l" ] || [ "$1" = "--list" ]; then
     exit 0
 fi
 
-# Load environment variables from .env.local
-if [ -f .env.local ]; then
+# Load environment variables from .env
+if [ -f .env ]; then
     set -a
-    source .env.local
+    source .env
     set +a
 else
-    echo -e "${RED}Error: .env.local not found!${NC}"
-    echo -e "Please create a ${YELLOW}.env.local${NC} file with your environment variables."
+    echo -e "${RED}Error: .env not found!${NC}"
+    echo -e "Please create a ${YELLOW}.env${NC} file with your environment variables."
     exit 1
 fi
 

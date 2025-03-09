@@ -5,69 +5,67 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function main() {
-    // Initialize the TradeStation client with environment variables
-    const client = new TradeStationClient();
+    // Initialize the TradeStation client with refresh token from environment variables
+    const client = new TradeStationClient({
+        refresh_token: process.env.REFRESH_TOKEN,
+        environment: (process.env.ENVIRONMENT || 'Simulation') as 'Simulation' | 'Live'
+    });
 
     try {
-        // Get accounts first
+        // Get accounts first to get the account IDs
         const accounts = await client.brokerage.getAccounts();
+
         if (accounts.length > 0) {
-            // Example 1: Get balances for a single account
-            const accountId = accounts[0].AccountID;
-            console.log(`\nGetting Balances for Account ${accountId}:`);
-            const singleAccountBalance = await client.brokerage.getBalances(accountId);
+            // Get balances for all accounts
+            console.log('\nGetting Balances for All Accounts:');
 
-            const balance = singleAccountBalance.Balances[0];
-            console.log(`\nAccount Details:`);
-            console.log(`Type: ${balance.AccountType}`);
-            console.log(`Cash Balance: ${balance.CashBalance}`);
-            console.log(`Equity: ${balance.Equity}`);
-            console.log(`Market Value: ${balance.MarketValue}`);
-            console.log(`Today's P/L: ${balance.TodaysProfitLoss}`);
-            console.log(`Buying Power: ${balance.BuyingPower}`);
-            console.log(`Uncleared Deposits: ${balance.UnclearedDeposit}`);
-            console.log('---');
+            // Process each account
+            for (const account of accounts) {
+                const accountId = account.AccountID;
+                const balanceResponse = await client.brokerage.getBalances(accountId);
 
-            // Example 2: Get balances for multiple accounts
-            if (accounts.length > 1) {
-                const accountIds = accounts.slice(0, 2).map(a => a.AccountID).join(',');
-                console.log(`\nGetting Balances for Multiple Accounts (${accountIds}):`);
-                const multiAccountBalances = await client.brokerage.getBalances(accountIds);
+                if (balanceResponse.Balances.length > 0) {
+                    const accountBalance = balanceResponse.Balances[0];
 
-                multiAccountBalances.Balances.forEach(balance => {
-                    console.log(`\nAccount: ${balance.AccountID}`);
-                    console.log(`Type: ${balance.AccountType}`);
-                    console.log(`Cash Balance: ${balance.CashBalance}`);
-                    console.log(`Equity: ${balance.Equity}`);
-                    console.log(`Market Value: ${balance.MarketValue}`);
-                    console.log(`Today's P/L: ${balance.TodaysProfitLoss}`);
-                    console.log(`Buying Power: ${balance.BuyingPower}`);
-                    console.log('---');
-                });
-            }
+                    console.log(`\nAccount: ${accountBalance.AccountID}`);
+                    console.log(`Account Type: ${accountBalance.AccountType || 'N/A'}`);
 
-            // Example 3: Get balances with currency details
-            console.log('\nGetting Balances with Currency Details:');
-            const balancesWithCurrency = await client.brokerage.getBalances(accountId);
+                    // Display basic balance information
+                    console.log('Balance Information:');
+                    console.log(`  Cash Balance: $${accountBalance.CashBalance || 'N/A'}`);
+                    console.log(`  Equity: $${accountBalance.Equity || 'N/A'}`);
+                    console.log(`  Market Value: $${accountBalance.MarketValue || 'N/A'}`);
+                    console.log(`  Buying Power: $${accountBalance.BuyingPower || 'N/A'}`);
+                    console.log(`  Today's P/L: $${accountBalance.TodaysProfitLoss || 'N/A'}`);
 
-            balancesWithCurrency.Balances.forEach(balance => {
-                console.log(`\nAccount: ${balance.AccountID}`);
-                console.log(`Type: ${balance.AccountType}`);
-                console.log(`Cash Balance: ${balance.CashBalance}`);
+                    // Display balance details if available
+                    if (accountBalance.BalanceDetail) {
+                        console.log('\nBalance Details:');
+                        const detail = accountBalance.BalanceDetail;
 
-                if (balance.CurrencyDetails && balance.CurrencyDetails.length > 0) {
-                    console.log('\nCurrency Details:');
-                    balance.CurrencyDetails.forEach(currency => {
-                        console.log(`Currency: ${currency.Currency}`);
-                        console.log(`Cash Balance: ${currency.CashBalance}`);
-                        console.log(`BOD Open Trade Equity: ${currency.BODOpenTradeEquity}`);
-                        console.log(`Margin Requirement: ${currency.MarginRequirement}`);
-                        console.log('---');
-                    });
+                        // Only display properties that exist in the BalanceDetail object
+                        if (detail.MarginRequirement) console.log(`  Margin Requirement: $${detail.MarginRequirement}`);
+                        if (detail.DayTradeMargin) console.log(`  Day Trade Margin: $${detail.DayTradeMargin}`);
+                        if (detail.UnsettledFunds) console.log(`  Unsettled Funds: $${detail.UnsettledFunds}`);
+                    }
+
+                    // Display currency details if available
+                    if (accountBalance.CurrencyDetails && accountBalance.CurrencyDetails.length > 0) {
+                        console.log('\nCurrency Details:');
+                        accountBalance.CurrencyDetails.forEach(currency => {
+                            console.log(`  ${currency.Currency}:`);
+                            if (currency.CashBalance) console.log(`    Cash Balance: $${currency.CashBalance}`);
+                            if (currency.MarginRequirement) console.log(`    Margin Requirement: $${currency.MarginRequirement}`);
+                            if (currency.NonTradeDebit) console.log(`    Non-Trade Debit: $${currency.NonTradeDebit}`);
+                            if (currency.TradeEquity) console.log(`    Trade Equity: $${currency.TradeEquity}`);
+                        });
+                    }
                 }
-            });
+                console.log('---');
+            }
+        } else {
+            console.log('No accounts found.');
         }
-
     } catch (error) {
         console.error('Error:', error);
     }

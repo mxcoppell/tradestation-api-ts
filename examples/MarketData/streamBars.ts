@@ -5,8 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function main() {
-    // Initialize the TradeStation client with environment variables
-    const client = new TradeStationClient();
+    // Initialize the TradeStation client with refresh token from environment variables
+    const client = new TradeStationClient({
+        refresh_token: process.env.REFRESH_TOKEN,
+        environment: (process.env.ENVIRONMENT || "Simulation") as "Simulation" | "Live"
+    });
 
     try {
         // Stream 1-minute bars for MSFT

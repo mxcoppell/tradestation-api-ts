@@ -26,9 +26,7 @@ describe('TokenManager', () => {
     const mockConfig: ClientConfig = {
         clientId: 'test-client-id',
         clientSecret: 'test-client-secret',
-        username: 'test-user',
-        password: 'test-pass',
-        scope: 'MarketData ReadAccount Trade Matrix',
+        refresh_token: 'test-refresh-token',
     };
 
     beforeEach(() => {
@@ -42,53 +40,6 @@ describe('TokenManager', () => {
         jest.clearAllMocks();
     });
 
-    describe('authenticate', () => {
-        it('should authenticate successfully with valid credentials', async () => {
-            const mockResponse: TokenResponse = {
-                data: {
-                    access_token: 'test_access_token',
-                    refresh_token: 'test_refresh_token',
-                    expires_in: 3600,
-                }
-            };
-
-            mockPost.mockResolvedValueOnce(mockResponse);
-
-            await tokenManager.authenticate();
-
-            expect(mockPost).toHaveBeenCalledWith(
-                '/oauth/token',
-                expect.any(URLSearchParams)
-            );
-            expect(tokenManager.hasValidToken()).toBe(true);
-        });
-
-        it('should throw error when authentication fails', async () => {
-            const error = new Error('Authentication failed');
-            mockPost.mockRejectedValueOnce(error);
-
-            await expect(tokenManager.authenticate()).rejects.toThrow('Authentication failed');
-            expect(tokenManager.hasValidToken()).toBe(false);
-        });
-
-        it('should handle Axios error with response data', async () => {
-            const axios = require('axios');
-            const error = {
-                response: {
-                    data: {
-                        error: 'invalid_grant',
-                        error_description: 'Invalid credentials',
-                    },
-                },
-            };
-            mockPost.mockRejectedValueOnce(error);
-            axios.isAxiosError.mockReturnValueOnce(true);
-
-            await expect(tokenManager.authenticate()).rejects.toThrow('Authentication failed: Invalid credentials');
-            expect(tokenManager.hasValidToken()).toBe(false);
-        });
-    });
-
     describe('refreshAccessToken', () => {
         it('should refresh token successfully', async () => {
             const mockResponse: TokenResponse = {
@@ -99,14 +50,6 @@ describe('TokenManager', () => {
                 }
             };
 
-            // First authenticate to get a refresh token
-            mockPost.mockResolvedValueOnce(mockResponse);
-            await tokenManager.authenticate();
-
-            // Clear the first mock call
-            mockPost.mockClear();
-
-            // Now mock the refresh token call
             mockPost.mockResolvedValueOnce(mockResponse);
 
             await tokenManager.refreshAccessToken();
@@ -116,51 +59,62 @@ describe('TokenManager', () => {
                 expect.any(URLSearchParams)
             );
             expect(tokenManager.hasValidToken()).toBe(true);
+            expect(tokenManager.getRefreshToken()).toBe('new_refresh_token');
         });
 
-        it('should throw error when refresh fails', async () => {
-            // First authenticate to get a refresh token
+        it('should refresh token successfully with same refresh token', async () => {
             const mockResponse: TokenResponse = {
                 data: {
-                    access_token: 'test_access_token',
-                    refresh_token: 'test_refresh_token',
+                    access_token: 'new_access_token',
+                    refresh_token: 'test-refresh-token', // Same refresh token
                     expires_in: 3600,
                 }
             };
+
             mockPost.mockResolvedValueOnce(mockResponse);
 
-            await tokenManager.authenticate();
+            await tokenManager.refreshAccessToken();
 
-            // Clear the first mock call
-            mockPost.mockClear();
+            expect(mockPost).toHaveBeenCalledWith(
+                '/oauth/token',
+                expect.any(URLSearchParams)
+            );
+            expect(tokenManager.hasValidToken()).toBe(true);
+            expect(tokenManager.getRefreshToken()).toBe('test-refresh-token');
+        });
 
-            // Now mock the refresh token failure
+        it('should refresh token successfully without returning a refresh token', async () => {
+            const mockResponse: TokenResponse = {
+                data: {
+                    access_token: 'new_access_token',
+                    refresh_token: '', // Empty refresh token
+                    expires_in: 3600,
+                }
+            };
+
+            mockPost.mockResolvedValueOnce(mockResponse);
+
+            await tokenManager.refreshAccessToken();
+
+            expect(mockPost).toHaveBeenCalledWith(
+                '/oauth/token',
+                expect.any(URLSearchParams)
+            );
+            expect(tokenManager.hasValidToken()).toBe(true);
+            expect(tokenManager.getRefreshToken()).toBe('test-refresh-token'); // Original refresh token retained
+        });
+
+        it('should throw error when refresh fails', async () => {
             const error = new Error('Refresh failed');
             mockPost.mockRejectedValueOnce(error);
 
             await expect(tokenManager.refreshAccessToken()).rejects.toThrow('Refresh failed');
-            expect(tokenManager.hasValidToken()).toBe(true); // Still true because the token hasn't expired
+            expect(tokenManager.hasValidToken()).toBe(false);
         });
 
         it('should handle Axios error with response data during refresh', async () => {
             const axios = require('axios');
 
-            // First authenticate to get a refresh token
-            const mockResponse: TokenResponse = {
-                data: {
-                    access_token: 'test_access_token',
-                    refresh_token: 'test_refresh_token',
-                    expires_in: 3600,
-                }
-            };
-            mockPost.mockResolvedValueOnce(mockResponse);
-
-            await tokenManager.authenticate();
-
-            // Clear the first mock call
-            mockPost.mockClear();
-
-            // Now mock the refresh token failure with Axios error
             const error = {
                 response: {
                     data: {
@@ -173,7 +127,7 @@ describe('TokenManager', () => {
             axios.isAxiosError.mockReturnValueOnce(true);
 
             await expect(tokenManager.refreshAccessToken()).rejects.toThrow('Token refresh failed: Invalid refresh token');
-            expect(tokenManager.hasValidToken()).toBe(true); // Still true because the token hasn't expired
+            expect(tokenManager.hasValidToken()).toBe(false);
         });
     });
 
@@ -193,7 +147,7 @@ describe('TokenManager', () => {
 
             mockPost.mockResolvedValueOnce(mockResponse);
 
-            await tokenManager.authenticate();
+            await tokenManager.refreshAccessToken();
 
             // Wait for the token to expire
             await new Promise(resolve => setTimeout(resolve, 100));
@@ -212,14 +166,54 @@ describe('TokenManager', () => {
                 },
             };
             mockPost.mockResolvedValueOnce(mockResponse);
-            await tokenManager.authenticate();
+            await tokenManager.refreshAccessToken();
             const token = await tokenManager.getValidAccessToken();
             expect(token).toBe('test_access_token');
         });
 
-        it('should throw error when no token is available', async () => {
-            mockPost.mockRejectedValueOnce(new Error('Authentication failed'));
-            await expect(tokenManager.getValidAccessToken()).rejects.toThrow('Authentication failed');
+        it('should refresh token when token is about to expire', async () => {
+            // First, get a token that expires immediately
+            const initialResponse: TokenResponse = {
+                data: {
+                    access_token: 'initial_access_token',
+                    refresh_token: 'test_refresh_token',
+                    expires_in: 0, // Expires immediately
+                },
+            };
+            mockPost.mockResolvedValueOnce(initialResponse);
+            await tokenManager.refreshAccessToken();
+
+            // Clear the first mock call
+            mockPost.mockClear();
+
+            // Now mock the second refresh
+            const refreshResponse: TokenResponse = {
+                data: {
+                    access_token: 'refreshed_access_token',
+                    refresh_token: 'new_refresh_token',
+                    expires_in: 3600,
+                },
+            };
+            mockPost.mockResolvedValueOnce(refreshResponse);
+
+            // This should refresh the token
+            const token = await tokenManager.getValidAccessToken();
+
+            expect(mockPost).toHaveBeenCalledWith(
+                '/oauth/token',
+                expect.any(URLSearchParams)
+            );
+            expect(token).toBe('refreshed_access_token');
+            expect(tokenManager.getRefreshToken()).toBe('new_refresh_token');
+        });
+
+        it('should throw error when no refresh token is available', async () => {
+            const tokenManagerWithoutRefreshToken = new TokenManager({
+                clientId: 'test-client-id',
+                clientSecret: 'test-client-secret',
+            });
+
+            await expect(tokenManagerWithoutRefreshToken.getValidAccessToken()).rejects.toThrow('No refresh token available');
         });
     });
 }); 

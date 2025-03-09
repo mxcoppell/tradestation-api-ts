@@ -13,11 +13,9 @@ export class HttpClient {
         this.rateLimiter = new RateLimiter();
 
         // Determine base URL based on environment
-        const baseURL = config?.baseUrl || (
-            config?.environment?.toLowerCase() === 'simulation'
-                ? 'https://sim.api.tradestation.com'
-                : process.env.BASE_URL || 'https://api.tradestation.com'
-        );
+        const baseURL = config?.environment?.toLowerCase() === 'simulation'
+            ? 'https://sim.api.tradestation.com'
+            : 'https://api.tradestation.com';
 
         this.axiosInstance = axios.create({
             baseURL,
@@ -54,8 +52,12 @@ export class HttpClient {
         );
     }
 
-    async authenticate(): Promise<void> {
-        await this.tokenManager.authenticate();
+    /**
+     * Gets the current refresh token
+     * @returns The current refresh token or null if none is available
+     */
+    getRefreshToken(): string | null {
+        return this.tokenManager.getRefreshToken();
     }
 
     async get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {

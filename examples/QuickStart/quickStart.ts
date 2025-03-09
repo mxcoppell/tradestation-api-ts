@@ -1,7 +1,7 @@
 import { TradeStationClient } from '../../src';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
+// Load environment variables from .env file (default)
 dotenv.config();
 
 /**
@@ -11,22 +11,30 @@ dotenv.config();
  * 3. Get symbol definition for AAPL
  * 4. Handle the response and potential errors
  * 
- * Required environment variables (.env.local):
+ * Required environment variables (.env):
  * - CLIENT_ID: Your TradeStation API client ID
  * - CLIENT_SECRET: Your TradeStation API client secret
- * - USERNAME: Your TradeStation username
- * - PASSWORD: Your TradeStation password
- * - SCOPE: API access scope (e.g., "ReadAccount Trade Matrix")
+ * - REFRESH_TOKEN: Your TradeStation refresh token
+ * - ENVIRONMENT: 'Simulation' or 'Live'
  */
 
 async function main() {
     try {
+        console.log('Environment variables:');
+        console.log(`CLIENT_ID: ${process.env.CLIENT_ID ? '✓ (set)' : '✗ (not set)'}`);
+        console.log(`CLIENT_SECRET: ${process.env.CLIENT_SECRET ? '✓ (set)' : '✗ (not set)'}`);
+        console.log(`REFRESH_TOKEN: ${process.env.REFRESH_TOKEN ? '✓ (set)' : '✗ (not set)'}`);
+        console.log(`ENVIRONMENT: ${process.env.ENVIRONMENT || 'not set (using Simulation default)'}`);
+
         // Initialize the TradeStation client
         // The client will automatically:
         // - Load credentials from environment variables
-        // - Handle authentication
+        // - Handle authentication using refresh token
         // - Manage rate limiting (default: 120 requests per minute)
-        const client = new TradeStationClient();
+        const client = new TradeStationClient({
+            refresh_token: process.env.REFRESH_TOKEN,
+            environment: (process.env.ENVIRONMENT || 'Simulation') as 'Simulation' | 'Live'
+        });
 
         // Get symbol definition for AAPL
         console.log('\nFetching symbol definition for AAPL...');

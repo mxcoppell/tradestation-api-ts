@@ -25,10 +25,7 @@ const client = new TradeStationClient();
 
 // Using explicit configuration
 const client = new TradeStationClient({
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret',
-    username: 'your_username',
-    password: 'your_password',
+    refresh_token: 'your_refresh_token',
     environment: 'Simulation', // or 'Live'
     maxConcurrentStreams: 10  // optional
 });
@@ -205,13 +202,3 @@ try {
     }
 }
 ```
-
-### Common Error Types
-
-- `AuthenticationError`: Token-related errors
-- `RateLimitError`: Rate limit exceeded
-- `ValidationError`: Invalid request parameters
-- `ApiError`: General API errors
-- `NetworkError`: Connection issues
-
-For more detailed information about specific endpoints and data types, please refer to the [official TradeStation API documentation](https://api.tradestation.com/docs/). 

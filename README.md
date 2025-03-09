@@ -37,10 +37,7 @@ const client = new TradeStationClient();
 
 // Or with explicit configuration
 const client = new TradeStationClient({
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret',
-    username: 'your_username',
-    password: 'your_password',
+    refresh_token: 'your_refresh_token',
     environment: 'Simulation'  // or 'Live'
 });
 ```
@@ -157,13 +154,12 @@ client.closeAllStreams();
 
 ## Quick Start
 
-1. Create a `.env.local` file with your TradeStation API credentials:
+1. Create a `.env` file with your TradeStation API credentials:
 
 ```env
 CLIENT_ID=your_client_id
 CLIENT_SECRET=your_client_secret
-USERNAME=your_username
-PASSWORD=your_password
+REFRESH_TOKEN=your_refresh_token
 ENVIRONMENT=Simulation  # or 'Live'
 ```
 
@@ -241,8 +237,8 @@ cd tradestation-api-ts
 npm install
 
 # Create local environment file
-cp .env.local.sample .env.local
-# Edit .env.local with your TradeStation API credentials
+cp .env.sample .env
+# Edit .env with your TradeStation API credentials
 ```
 
 ### Build

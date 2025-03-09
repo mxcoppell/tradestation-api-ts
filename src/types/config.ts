@@ -1,10 +1,7 @@
 export interface ClientConfig {
     clientId?: string;
     clientSecret?: string;
-    username?: string;
-    password?: string;
-    scope?: string;
-    baseUrl?: string;
+    refresh_token?: string;
     maxConcurrentStreams?: number;
     environment?: 'Simulation' | 'Live';
 }

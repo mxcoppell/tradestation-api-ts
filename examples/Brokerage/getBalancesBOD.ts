@@ -5,8 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function main() {
-    // Initialize the TradeStation client with environment variables
-    const client = new TradeStationClient();
+    // Initialize the TradeStation client with refresh token from environment variables
+    const client = new TradeStationClient({
+        refresh_token: process.env.REFRESH_TOKEN,
+        environment: (process.env.ENVIRONMENT || 'Simulation') as 'Simulation' | 'Live'
+    });
 
     try {
         // Get accounts first
@@ -42,18 +45,13 @@ async function main() {
                     if (balance.BalanceDetail) {
                         console.log(`Account Balance: ${balance.BalanceDetail.AccountBalance}`);
                         console.log(`Cash Available to Withdraw: ${balance.BalanceDetail.CashAvailableToWithdraw}`);
-                        console.log(`Day Trades: ${balance.BalanceDetail.DayTrades}`);
                         console.log(`Equity: ${balance.BalanceDetail.Equity}`);
                         console.log(`Net Cash: ${balance.BalanceDetail.NetCash}`);
-                        if (balance.BalanceDetail.OptionBuyingPower) {
-                            console.log(`Option Buying Power: ${balance.BalanceDetail.OptionBuyingPower}`);
-                        }
                     }
                     console.log('---');
                 });
             }
         }
-
     } catch (error) {
         console.error('Error:', error);
     }

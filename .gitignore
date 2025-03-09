@@ -33,7 +33,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
 
 # vercel
 .vercel
@@ -49,6 +49,6 @@ getauthtoken.sh
 .cursorrules
 .cursor
 
-# Environment variables
-.env.local
-!.env.local.sample
+# Environment Variables
+.env
+!.env.sample

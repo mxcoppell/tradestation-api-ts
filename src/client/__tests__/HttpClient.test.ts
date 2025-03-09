@@ -14,7 +14,7 @@ describe('HttpClient', () => {
     let mockAxiosInstance: jest.Mocked<AxiosInstance>;
     let mockTokenManager: {
         getValidAccessToken: jest.Mock<Promise<string>>;
-        authenticate: jest.Mock<Promise<void>>;
+        getRefreshToken: jest.Mock<string | null>;
         hasValidToken: jest.Mock<boolean>;
         refreshAccessToken: jest.Mock<Promise<void>>;
     };
@@ -31,7 +31,7 @@ describe('HttpClient', () => {
         config = {
             clientId: 'test-client-id',
             clientSecret: 'test-client-secret',
-            baseUrl: 'https://test-api.com'
+            environment: 'Simulation'
         };
 
         // Setup mock axios instance
@@ -51,7 +51,7 @@ describe('HttpClient', () => {
         // Setup mock token manager
         mockTokenManager = {
             getValidAccessToken: jest.fn().mockResolvedValue('token'),
-            authenticate: jest.fn().mockResolvedValue(undefined),
+            getRefreshToken: jest.fn().mockReturnValue('refresh-token'),
             hasValidToken: jest.fn().mockReturnValue(true),
             refreshAccessToken: jest.fn().mockResolvedValue(undefined),
         };
@@ -75,26 +75,28 @@ describe('HttpClient', () => {
     });
 
     describe('constructor', () => {
-        it('should create axios instance with correct config', () => {
+        it('should create axios instance with correct config for Simulation environment', () => {
             expect(axios.create).toHaveBeenCalledWith({
-                baseURL: 'https://test-api.com',
+                baseURL: 'https://sim.api.tradestation.com',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         });
 
-        it('should use default base URL if not provided', () => {
-            const clientWithDefaultUrl = new HttpClient({
-                clientId: 'test',
-                clientSecret: 'test'
-            });
+        it('should create axios instance with correct config for Live environment', () => {
+            const liveConfig = {
+                ...config,
+                environment: 'Live' as 'Live' | 'Simulation'
+            };
+            new HttpClient(liveConfig);
 
-            expect(axios.create).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    baseURL: 'https://api.tradestation.com'
-                })
-            );
+            expect(axios.create).toHaveBeenCalledWith({
+                baseURL: 'https://api.tradestation.com',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         });
     });
 
@@ -216,20 +218,22 @@ describe('HttpClient', () => {
         });
     });
 
-    describe('authenticate', () => {
-        it('should call tokenManager.authenticate', async () => {
-            mockTokenManager.authenticate.mockResolvedValue();
+    describe('getRefreshToken', () => {
+        it('should return the refresh token from token manager', () => {
+            mockTokenManager.getRefreshToken.mockReturnValue('test-refresh-token');
 
-            await httpClient.authenticate();
+            const refreshToken = httpClient.getRefreshToken();
 
-            expect(mockTokenManager.authenticate).toHaveBeenCalled();
+            expect(refreshToken).toBe('test-refresh-token');
+            expect(mockTokenManager.getRefreshToken).toHaveBeenCalled();
         });
 
-        it('should handle authentication errors', async () => {
-            const error = new Error('Auth error');
-            mockTokenManager.authenticate.mockRejectedValue(error);
+        it('should return null when no refresh token is available', () => {
+            mockTokenManager.getRefreshToken.mockReturnValue(null);
 
-            await expect(httpClient.authenticate()).rejects.toThrow('Auth error');
+            const refreshToken = httpClient.getRefreshToken();
+
+            expect(refreshToken).toBeNull();
         });
     });
 }); 

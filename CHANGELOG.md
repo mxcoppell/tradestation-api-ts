@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-03-09
+
+### Added
+- Support for refresh token authentication
+- Helper script for obtaining refresh tokens (`docs/getauthtoken.sh`)
+
+### Changed
+- Updated authentication method from username/password to refresh token
+- Modified client initialization to use refresh tokens
+- Updated all examples to use refresh token authentication
+- Simplified environment setup with consolidated `.env` file (replacing `.env.local`)
+- Updated documentation to reflect the new authentication approach
+- Token manager now supports refresh token rotation
+
+### Removed
+- Username/password authentication method
+- References to `.env.local` in favor of `.env`
+
 ## [1.1.0] - 2025-02-18
 
 ### Fixed

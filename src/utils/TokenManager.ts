@@ -22,12 +22,13 @@ export class TokenManager {
         this.config = {
             clientId,
             clientSecret,
-            username: config?.username || process.env.USERNAME,
-            password: config?.password || process.env.PASSWORD,
-            scope: config?.scope || process.env.SCOPE,
-            baseUrl: config?.baseUrl,
             maxConcurrentStreams: config?.maxConcurrentStreams,
         };
+
+        // Set initial refresh token if provided in config
+        if (config?.refresh_token) {
+            this.refreshToken = config.refresh_token;
+        }
 
         this.axiosInstance = axios.create({
             baseURL: 'https://signin.tradestation.com',
@@ -54,44 +55,17 @@ export class TokenManager {
             if (this.refreshToken) {
                 await this.refreshAccessToken();
             } else {
-                await this.authenticate();
+                throw new Error('No refresh token available. You must provide a refresh token in the client configuration.');
             }
         }
         return this.getAccessToken();
     }
 
-    async authenticate(): Promise<void> {
-        if (!this.config.username || !this.config.password) {
-            throw new Error('Username and password are required for authentication');
-        }
-
-        if (!this.config.scope) {
-            throw new Error('Scope is required for authentication');
-        }
-
-        const params = new URLSearchParams({
-            grant_type: 'http://auth0.com/oauth/grant-type/password-realm',
-            client_id: this.config.clientId,
-            client_secret: this.config.clientSecret,
-            audience: 'https://api.tradestation.com',
-            realm: 'auth0-api-connection',
-            scope: this.config.scope,
-            username: this.config.username,
-            password: this.config.password,
-        });
-
-        try {
-            const response = await this.axiosInstance.post<AuthResponse>('/oauth/token', params);
-            this.updateTokens(response.data);
-        } catch (error: any) {
-            if (axios.isAxiosError(error) && error.response?.data) {
-                const apiError = error.response.data as ApiError;
-                throw new Error(`Authentication failed: ${apiError.error_description || apiError.error}`);
-            }
-            throw error;
-        }
-    }
-
+    /**
+     * Refreshes the access token using the refresh token.
+     * If the response includes a new refresh token, it will be stored for future use.
+     * @throws Error if refresh fails or no refresh token is available
+     */
     async refreshAccessToken(): Promise<void> {
         if (!this.refreshToken) {
             throw new Error('No refresh token available');
@@ -132,8 +106,19 @@ export class TokenManager {
 
     private updateTokens(authResponse: AuthResponse): void {
         this.accessToken = authResponse.access_token;
-        this.refreshToken = authResponse.refresh_token;
+        // Update refresh token only if a new one is provided
+        if (authResponse.refresh_token) {
+            this.refreshToken = authResponse.refresh_token;
+        }
         this.tokenExpiry = Date.now() + (authResponse.expires_in * 1000);
+    }
+
+    /**
+     * Returns the current refresh token
+     * @returns The current refresh token or null if none is available
+     */
+    getRefreshToken(): string | null {
+        return this.refreshToken;
     }
 
     private getAccessToken(): string {

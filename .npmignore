@@ -12,7 +12,7 @@ tsconfig.examples.json
 
 # Development files
 .env*
-.env.local*
+!.env.sample
 .cursorrules
 .cursor
 .vscode/

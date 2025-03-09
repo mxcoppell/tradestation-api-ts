@@ -141,7 +141,7 @@ import { TradeStationClient } from '../../src';
 
 async function main() {
     try {
-        // Initialize client
+        // Initialize client with refresh token from environment variables
         const client = new TradeStationClient();
 
         // Example implementation
@@ -234,6 +234,7 @@ const client = new TradeStationClient();
 
 // Or explicit configuration
 const client = new TradeStationClient({
+    refresh_token: 'your_refresh_token',
     environment: 'Simulation',
     debug: true
 });

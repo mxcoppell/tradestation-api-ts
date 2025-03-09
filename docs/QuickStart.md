@@ -58,23 +58,35 @@ npm install tradestation-api-ts dotenv typescript ts-node @types/node
 }
 ```
 
-## Step 3: Setting Up Environment Variables 🔐
+## Step 3: Setting Up Environment Variables ��
 
-1. Create a `.env.local` file in your project root:
+1. Create a `.env` file in your project root:
 ```env
 CLIENT_ID=your_client_id
 CLIENT_SECRET=your_client_secret
-USERNAME=your_tradestation_username
-PASSWORD=your_tradestation_password
+REFRESH_TOKEN=your_refresh_token
 ENVIRONMENT=Simulation  # Use 'Simulation' for testing, 'Live' for real trading
 ```
 
-> 🔒 Security Tip: Never commit your `.env.local` file to version control! Add it to your `.gitignore`:
+> 🔒 Security Tip: Never commit your `.env` file to version control! Add it to your `.gitignore`:
 ```bash
-echo ".env.local" >> .gitignore
+echo ".env" >> .gitignore
 ```
 
-## Step 4: Creating Your First Script 📝
+## Step 4: Obtaining a Refresh Token 🔑
+
+TradeStation uses OAuth 2.0 with refresh tokens for authentication. To get a refresh token:
+
+1. Use the TradeStation OAuth flow:
+   - Use the [TradeStation OAuth documentation](https://api.tradestation.com/docs/fundamentals/authentication) for details
+   - Or use our helper script to get an initial token:
+   ```bash
+   sh ./docs/getauthtoken.sh your_client_id your_client_secret
+   ```
+
+2. Save the refresh token in your `.env` file as shown in Step 3.
+
+## Step 5: Creating Your First Script 📝
 
 Create a new file called `quickStart.ts`:
 
@@ -87,7 +99,7 @@ dotenv.config();
 
 async function main() {
     try {
-        // Initialize the client
+        // Initialize the client with the refresh token
         const client = new TradeStationClient();
         
         // Get symbol information for Apple (AAPL)
@@ -127,7 +139,7 @@ async function main() {
 main();
 ```
 
-## Step 5: Running Your Script 🏃‍♂️
+## Step 6: Running Your Script 🏃‍♂️
 
 1. Run the script using ts-node:
 ```bash
@@ -189,7 +201,7 @@ const order = await client.orderExecution.placeOrder({
 ## Common Issues & Solutions 🔧
 
 1. **Authentication Error**
-   - Double-check your credentials in `.env.local`
+   - Double-check your credentials in `.env`
    - Ensure you're using the correct environment ('Simulation' or 'Live')
 
 2. **Rate Limit Exceeded**

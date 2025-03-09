@@ -17,16 +17,17 @@ export class TradeStationClient {
      * Creates a new TradeStationClient instance
      * @param config Optional configuration object. If not provided, values will be read from environment variables
      * @example
-     * // Using environment variables
-     * const client = new TradeStationClient();
+     * // Using environment variables (CLIENT_ID and CLIENT_SECRET must be set)
+     * const client = new TradeStationClient({
+     *   refresh_token: 'your_refresh_token',
+     *   environment: 'Simulation' // or 'Live'
+     * });
      * 
      * // Using explicit configuration
      * const client = new TradeStationClient({
      *   clientId: 'your_client_id',
      *   clientSecret: 'your_client_secret',
-     *   username: 'your_username',
-     *   password: 'your_password',
-     *   scope: 'your scopes',
+     *   refresh_token: 'your_refresh_token',
      *   environment: 'Simulation' // or 'Live'
      * });
      */
@@ -57,11 +58,11 @@ export class TradeStationClient {
     }
 
     /**
-     * Authenticates with the TradeStation API
-     * This is called automatically when needed, but can be called explicitly to pre-authenticate
+     * Gets the current refresh token
+     * @returns The current refresh token or null if none is available
      */
-    async authenticate(): Promise<void> {
-        await this.httpClient.authenticate();
+    getRefreshToken(): string | null {
+        return this.httpClient.getRefreshToken();
     }
 
     /**
