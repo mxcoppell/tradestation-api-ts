@@ -21,6 +21,7 @@ The main entry point for interacting with the TradeStation API.
 import { TradeStationClient } from 'tradestation-api-ts';
 
 // Using environment variables
+// Automatically reads CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, and ENVIRONMENT from .env
 const client = new TradeStationClient();
 
 // Using explicit configuration

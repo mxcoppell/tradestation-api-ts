@@ -33,6 +33,7 @@ npm install tradestation-api-ts
 import { TradeStationClient } from 'tradestation-api-ts';
 
 // Initialize with environment variables
+// Automatically reads CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, and ENVIRONMENT from .env
 const client = new TradeStationClient();
 
 // Or with explicit configuration

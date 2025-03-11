@@ -99,7 +99,7 @@ dotenv.config();
 
 async function main() {
     try {
-        // Initialize the client with the refresh token
+        // Initialize the client - automatically reads all credentials from environment variables
         const client = new TradeStationClient();
         
         // Get symbol information for Apple (AAPL)

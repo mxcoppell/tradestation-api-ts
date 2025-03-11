@@ -6,10 +6,7 @@ dotenv.config();
 
 async function main() {
     // Initialize the TradeStation client with refresh token from environment variables
-    const client = new TradeStationClient({
-        refresh_token: process.env.REFRESH_TOKEN,
-        environment: (process.env.ENVIRONMENT || "Simulation") as "Simulation" | "Live"
-    });
+    const client = new TradeStationClient();
 
     try {
         // Stream real-time quotes

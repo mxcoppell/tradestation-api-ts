@@ -6,10 +6,7 @@ dotenv.config();
 
 async function main() {
     // Initialize the TradeStation client with refresh token from environment variables
-    const client = new TradeStationClient({
-        refresh_token: process.env.REFRESH_TOKEN,
-        environment: (process.env.ENVIRONMENT || 'Simulation') as 'Simulation' | 'Live'
-    })
+    const client = new TradeStationClient();
 
     try {
         // Example 1: Get daily bars for the last 5 days

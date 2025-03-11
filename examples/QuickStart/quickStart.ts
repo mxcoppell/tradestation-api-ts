@@ -31,10 +31,7 @@ async function main() {
         // - Load credentials from environment variables
         // - Handle authentication using refresh token
         // - Manage rate limiting (default: 120 requests per minute)
-        const client = new TradeStationClient({
-            refresh_token: process.env.REFRESH_TOKEN,
-            environment: (process.env.ENVIRONMENT || 'Simulation') as 'Simulation' | 'Live'
-        });
+        const client = new TradeStationClient();
 
         // Get symbol definition for AAPL
         console.log('\nFetching symbol definition for AAPL...');

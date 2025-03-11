@@ -45,6 +45,7 @@ ENVIRONMENT=Simulation  # or 'Live'
 import { TradeStationClient } from 'tradestation-api-ts';
 
 // Using environment variables
+// Automatically reads CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, and ENVIRONMENT from .env
 const client = new TradeStationClient();
 
 // Or with explicit configuration

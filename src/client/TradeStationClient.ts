@@ -42,10 +42,14 @@ export class TradeStationClient {
             throw new Error('Environment must be specified either in config or ENVIRONMENT env var');
         }
 
-        // Create final config with normalized environment
+        // Get refresh token from config or env var
+        const refresh_token = config?.refresh_token || process.env.REFRESH_TOKEN;
+
+        // Create final config with normalized environment and refresh token
         const finalConfig: ClientConfig = {
             ...config,
-            environment
+            environment,
+            refresh_token
         };
 
         this.httpClient = new HttpClient(finalConfig);
