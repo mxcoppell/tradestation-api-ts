@@ -1,0 +1,13 @@
+# Global code owners
+* @mxcoppell
+
+# Specific ownership for critical files
+src/* @mxcoppell
+lib/* @mxcoppell
+package.json @mxcoppell
+tsconfig.json @mxcoppell
+*.config.* @mxcoppell
+
+# Documentation
+*.md @mxcoppell
+README.md @mxcoppell
