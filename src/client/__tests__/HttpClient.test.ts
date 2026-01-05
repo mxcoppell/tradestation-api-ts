@@ -61,6 +61,7 @@ describe('HttpClient', () => {
         mockRateLimiter = {
             waitForSlot: jest.fn(),
             updateLimits: jest.fn(),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any;
         (RateLimiter as unknown as jest.Mock).mockImplementation(() => mockRateLimiter);
 

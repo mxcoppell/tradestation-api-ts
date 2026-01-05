@@ -64,11 +64,11 @@ export class HttpClient {
         return this.axiosInstance.get<T>(url, config);
     }
 
-    async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    async post<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         return this.axiosInstance.post<T>(url, data, config);
     }
 
-    async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    async put<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         return this.axiosInstance.put<T>(url, data, config);
     }
 

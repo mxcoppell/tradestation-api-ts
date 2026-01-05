@@ -39,6 +39,7 @@ async function main() {
         console.log(JSON.stringify(orderToConfirm, null, 2));
 
         // Confirm (validate) the order
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const confirmation = await client.orderExecution.confirmOrder(orderToConfirm as any);
 
         console.log('\nOrder Confirmation Result:');
@@ -47,10 +48,12 @@ async function main() {
         console.log(JSON.stringify(confirmation, null, 2));
 
         // Access confirmation properties safely with optional chaining
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const status = (confirmation as any).OrderStatus;
         if (status === 'Ok') {
             console.log('Order is valid and ready to place!');
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const orders = (confirmation as any).Orders || [];
             if (orders.length > 0) {
                 const confirmedOrder = orders[0];
@@ -69,6 +72,7 @@ async function main() {
                 }
 
                 // Display estimated cost if available
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const buyingPower = (confirmation as any).BuyingPower;
                 if (buyingPower) {
                     console.log('\nEstimated Cost:');
@@ -81,9 +85,11 @@ async function main() {
             }
         } else {
             console.log('Order validation failed!');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const messages = (confirmation as any).Messages || [];
             if (messages.length > 0) {
                 console.log('\nError Messages:');
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 messages.forEach((msg: any) => {
                     console.log(`- ${msg.Code}: ${msg.Text}`);
                 });

@@ -77,6 +77,7 @@ describe('StreamManager', () => {
 
             const emitter = await streamManager.createStream('/test/stream');
             const mockData = { test: 'data' };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const receivedData: any[] = [];
 
             emitter.on('data', (data) => {
@@ -157,7 +158,7 @@ describe('StreamManager', () => {
             mockHttpClient.createStream.mockResolvedValue(mockStream);
 
             const streamId = '/test/stream:{}';
-            const emitter = await streamManager.createStream('/test/stream');
+            await streamManager.createStream('/test/stream');
 
             streamManager.closeStream(streamId);
 

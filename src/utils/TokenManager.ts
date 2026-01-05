@@ -94,7 +94,7 @@ export class TokenManager {
             try {
                 const response = await this.axiosInstance.post<AuthResponse>('/oauth/token', params);
                 this.updateTokens(response.data);
-            } catch (error: any) {
+            } catch (error: unknown) {
                 if (axios.isAxiosError(error) && error.response?.data) {
                     const apiError = error.response.data as ApiError;
                     throw new Error(`Token refresh failed: ${apiError.error_description || apiError.error}`);

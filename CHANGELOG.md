@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-01-05
+
+### Security
+
+- Fixed several security vulnerabilities by updating dependencies:
+  - **form-data**: Updated from 4.0.2 to 4.0.5 (Critical)
+  - **axios**: Updated from 1.7.9 to 1.13.2 (High)
+  - **@babel/helpers**: Updated from 7.26.9 to 7.28.4 (Moderate)
+  - **js-yaml**: Updated from 3.14.1 to 3.14.2 (Moderate)
+  - **brace-expansion**: Updated from 1.1.11 to 1.1.12 and 2.0.1 to 2.0.2 (Low)
+
 ## [1.3.0] - 2026-01-05
 
 ### Changed

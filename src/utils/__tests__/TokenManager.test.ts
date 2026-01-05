@@ -31,6 +31,7 @@ describe('TokenManager', () => {
 
     beforeEach(() => {
         tokenManager = new TokenManager(mockConfig);
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const axios = require('axios');
         axios.isAxiosError.mockReturnValue(false);
         mockPost.mockReset();
@@ -113,6 +114,7 @@ describe('TokenManager', () => {
         });
 
         it('should handle Axios error with response data during refresh', async () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const axios = require('axios');
 
             const error = {
