@@ -22,7 +22,7 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\" \"examples/**/*.ts\"",
-    "prepare": "npm run build:all",
+    "prepublishOnly": "npm run build:all",
     "example:marketData:quotes": "ts-node examples/MarketData/streamQuotes.ts",
     "example:marketData:bars": "ts-node examples/MarketData/streamBars.ts",
     "example:marketData:optionQuotes": "ts-node examples/MarketData/streamOptionQuotes.ts",
