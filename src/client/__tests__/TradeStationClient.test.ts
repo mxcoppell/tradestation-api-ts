@@ -75,8 +75,9 @@ describe('TradeStationClient', () => {
         });
 
         it('should normalize environment value', () => {
-            const clientWithLowercaseEnv = new TradeStationClient({
+            new TradeStationClient({
                 ...config,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 environment: 'simulation' as any, // lowercase, cast to any to bypass type checking
             });
 

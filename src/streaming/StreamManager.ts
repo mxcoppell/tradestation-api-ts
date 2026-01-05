@@ -17,6 +17,7 @@ export class StreamManager {
 
     async createStream(
         endpoint: string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         params: Record<string, any> = {},
         options: Partial<AxiosRequestConfig> = {}
     ): Promise<EventEmitter> {
@@ -55,7 +56,7 @@ export class StreamManager {
                             try {
                                 const data = JSON.parse(line);
                                 emitter.emit('data', data);
-                            } catch (parseError) {
+                            } catch {
                                 console.debug('Failed to parse line:', line);
                             }
                         }
@@ -63,7 +64,7 @@ export class StreamManager {
 
                     // Keep the last incomplete line in the buffer
                     buffer = lines[lines.length - 1];
-                } catch (error) {
+                } catch {
                     emitter.emit('error', new Error('Failed to process stream data'));
                 }
             });
@@ -79,7 +80,7 @@ export class StreamManager {
                     try {
                         const data = JSON.parse(buffer.trim());
                         emitter.emit('data', data);
-                    } catch (parseError) {
+                    } catch {
                         console.debug('Failed to parse remaining buffer:', buffer);
                     }
                 }
@@ -88,6 +89,7 @@ export class StreamManager {
             });
 
             emitter.on('close', () => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (stream as any).destroy?.();
                 this.closeStream(streamId);
             });

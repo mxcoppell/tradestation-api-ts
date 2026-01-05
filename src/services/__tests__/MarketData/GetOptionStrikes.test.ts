@@ -27,17 +27,6 @@ describe('MarketDataService - Get Option Strikes', () => {
         ]
     };
 
-    // Mock response for vertical spreads
-    const mockVerticalResponse: Strikes = {
-        SpreadType: 'Vertical',
-        Strikes: [
-            ['150.00', '152.50'],
-            ['152.50', '155.00'],
-            ['155.00', '157.50'],
-            ['157.50', '160.00']
-        ]
-    };
-
     // Mock response for butterfly spreads
     const mockButterflyResponse: Strikes = {
         SpreadType: 'Butterfly',

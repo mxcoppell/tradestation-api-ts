@@ -1,5 +1,5 @@
 import { BrokerageService } from '../../BrokerageService';
-import { OrdersById, Order, OrderLeg } from '../../../types/brokerage';
+import { OrdersById } from '../../../types/brokerage';
 import { createMockHttpClient, createMockStreamManager, createAxiosResponse } from '../../testUtils';
 import { HttpClient } from '../../../client/HttpClient';
 import { StreamManager } from '../../../streaming/StreamManager';

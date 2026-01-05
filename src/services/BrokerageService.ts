@@ -3,11 +3,8 @@ import { HttpClient } from '../client/HttpClient';
 import { StreamManager } from '../streaming/StreamManager';
 import {
     Account,
-    Balance,
     Activity,
     ActivityFilter,
-    BalancesBOD,
-    HistoricalOrders,
     HistoricalOrdersById,
     Orders,
     OrdersById,

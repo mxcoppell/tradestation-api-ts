@@ -45,6 +45,7 @@ async function main() {
                 if (historicalOrder.Orders && historicalOrder.Orders.length > 0) {
                     console.log('Historical order details:');
                     console.log({
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         legs: historicalOrder.Orders[0].Legs?.map((leg: any) => ({
                             symbol: leg.Symbol,
                             quantity: leg.QuantityOrdered,

@@ -2,28 +2,13 @@ import { EventEmitter } from 'events';
 import { HttpClient } from '../client/HttpClient';
 import { StreamManager } from '../streaming/StreamManager';
 import {
-    Quote,
     QuoteSnapshot,
-    QuoteStream,
-    QuoteStreamResponse,
-    Bar,
     BarsResponse,
-    BarStreamResponse,
     BarStreamParams,
     BarHistoryParams,
-    BarUnit,
-    OptionChain,
     OptionChainParams,
-    OptionChainStreamResponse,
     OptionQuoteParams,
-    OptionQuoteStreamResponse,
-    OptionQuote,
-    MarketDepthQuote,
     MarketDepthParams,
-    MarketDepthStreamResponse,
-    MarketDepthAggregate,
-    MarketDepthAggregateStreamResponse,
-    SymbolDetail,
     SymbolDetailsResponse,
     SymbolNames,
     Expirations,
@@ -406,7 +391,7 @@ export class MarketDataService {
             throw new Error('Strike price must be a positive number');
         }
 
-        const params: Record<string, any> = {};
+        const params: Record<string, number> = {};
         if (strikePrice !== undefined) {
             params.strikePrice = strikePrice;
         }
@@ -959,7 +944,7 @@ export class MarketDataService {
         }
 
         // Validate and transform legs to query parameters
-        const queryParams: Record<string, any> = {
+        const queryParams: Record<string, string | number | boolean> = {
             enableGreeks: params.enableGreeks ?? true
         };
 

@@ -29,7 +29,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     OrderID: 'ORDER123',
                     Status: 'FLL',
                     StatusDescription: 'Filled',
-                    OpenedDateTime: '2025-01-19T10:00:00Z',
+                    OpenedDateTime: `${validDateStr}T10:00:00Z`,
                     OrderType: 'Market',
                     Duration: 'DAY',
                     Legs: [{
@@ -48,7 +48,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     OrderID: 'ORDER456',
                     Status: 'CAN',
                     StatusDescription: 'Cancelled',
-                    OpenedDateTime: '2025-01-19T10:00:00Z',
+                    OpenedDateTime: `${validDateStr}T10:00:00Z`,
                     OrderType: 'Market',
                     Duration: 'DAY',
                     Legs: [{
@@ -70,14 +70,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             '123456,789012',
             'ORDER123,ORDER456',
-            '2025-01-19'
+            validDateStr
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456,789012/historicalorders/ORDER123,ORDER456',
             {
                 params: {
-                    since: '2025-01-19'
+                    since: validDateStr
                 }
             }
         );
@@ -91,7 +91,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
                     OrderID: 'ORDER123',
                     Status: 'FLL',
                     StatusDescription: 'Filled',
-                    OpenedDateTime: '2025-01-19T10:00:00Z',
+                    OpenedDateTime: `${validDateStr}T10:00:00Z`,
                     OrderType: 'Market',
                     Duration: 'DAY',
                     Legs: [{
@@ -113,14 +113,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             '123456',
             'ORDER123',
-            '2025-01-19'
+            validDateStr
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-19'
+                    since: validDateStr
                 }
             }
         );
@@ -144,14 +144,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             'INVALID',
             'ORDER123',
-            '2025-01-19'
+            validDateStr
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/INVALID/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-19'
+                    since: validDateStr
                 }
             }
         );
@@ -175,14 +175,14 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         const result = await brokerageService.getHistoricalOrdersByOrderID(
             '123456',
             'INVALID',
-            '2025-01-19'
+            validDateStr
         );
         expect(result).toEqual(mockResponse);
         expect(mockHttpClient.get).toHaveBeenCalledWith(
             '/v3/brokerage/accounts/123456/historicalorders/INVALID',
             {
                 params: {
-                    since: '2025-01-19'
+                    since: validDateStr
                 }
             }
         );
@@ -194,7 +194,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         await expect(brokerageService.getHistoricalOrdersByOrderID(
             '123456',
             'ORDER123',
-            '2025-01-19'
+            validDateStr
         ))
             .rejects
             .toThrow('Network error');
@@ -202,7 +202,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
             '/v3/brokerage/accounts/123456/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-19'
+                    since: validDateStr
                 }
             }
         );
@@ -214,7 +214,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
         await expect(brokerageService.getHistoricalOrdersByOrderID(
             '123456',
             'ORDER123',
-            '2025-01-19'
+            validDateStr
         ))
             .rejects
             .toThrow('Unauthorized');
@@ -222,7 +222,7 @@ describe('BrokerageService - Get Historical Orders By Order ID', () => {
             '/v3/brokerage/accounts/123456/historicalorders/ORDER123',
             {
                 params: {
-                    since: '2025-01-19'
+                    since: validDateStr
                 }
             }
         );

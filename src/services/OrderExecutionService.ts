@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import { HttpClient } from '../client/HttpClient';
 import { StreamManager } from '../streaming/StreamManager';
 import {

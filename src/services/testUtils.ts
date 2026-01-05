@@ -26,6 +26,7 @@ export function createAxiosResponse<T>(data: T): AxiosResponse<T> {
         status: 200,
         statusText: 'OK',
         headers: {},
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         config: { headers: {} } as any
     };
-} 
+}
