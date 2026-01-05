@@ -5,6 +5,7 @@ This guide explains how to authenticate with the TradeStation API using this Typ
 ## Overview
 
 The TradeStation API uses OAuth 2.0 for authentication. This wrapper handles all the OAuth complexity for you, including:
+
 - Token management using refresh tokens
 - Automatic token refresh
 - Token rotation (handling new refresh tokens)
@@ -17,7 +18,7 @@ The TradeStation API uses OAuth 2.0 for authentication. This wrapper handles all
 1. Go to the [TradeStation API Portal](https://api.tradestation.com/)
 2. Create or log into your account
 3. Create a new application
-4. Note your Client ID and Client Secret
+4. Note your Client ID and Client Secret (if applicable)
 
 ### 2. Obtain a Refresh Token
 
@@ -34,7 +35,7 @@ Create a `.env` file in your project root:
 
 ```env
 CLIENT_ID=your_client_id
-CLIENT_SECRET=your_client_secret
+CLIENT_SECRET=your_client_secret # Optional for public clients
 REFRESH_TOKEN=your_refresh_token
 ENVIRONMENT=Simulation  # or 'Live'
 ```
@@ -45,7 +46,7 @@ ENVIRONMENT=Simulation  # or 'Live'
 import { TradeStationClient } from 'tradestation-api-ts';
 
 // Using environment variables
-// Automatically reads CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, and ENVIRONMENT from .env
+// Automatically reads CLIENT_ID, CLIENT_SECRET (optional), REFRESH_TOKEN, and ENVIRONMENT from .env
 const client = new TradeStationClient();
 
 // Or with explicit configuration
@@ -122,6 +123,7 @@ try {
 ```
 
 Common authentication errors:
+
 - Invalid refresh token
 - Expired refresh token
 - Network issues
@@ -132,7 +134,7 @@ Common authentication errors:
 
 1. Never commit credentials to source control
 2. Use environment variables for sensitive data
-3. Keep your Client Secret and Refresh Token secure
+3. Keep your Client Secret (if used) and Refresh Token secure
 4. Use the Simulation environment for testing
 5. Monitor token usage and refresh patterns
 6. Implement proper error handling
@@ -174,4 +176,4 @@ const client = new TradeStationClient({
 - [TradeStation API Documentation](https://api.tradestation.com/docs/)
 - [OAuth 2.0 Documentation](https://oauth.net/2/)
 - [API Status Page](https://status.tradestation.com/)
-- [TradeStation Support](https://www.tradestation.com/support/) 
+- [TradeStation Support](https://www.tradestation.com/support/)

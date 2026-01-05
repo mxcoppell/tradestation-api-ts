@@ -5,6 +5,7 @@ Welcome to the TradeStation API TypeScript wrapper! This guide will help you get
 ## What You'll Need 📋
 
 Before we begin, make sure you have:
+
 - [Node.js](https://nodejs.org/) installed (version 14 or higher)
 - [npm](https://www.npmjs.com/) (comes with Node.js)
 - A TradeStation account (if you don't have one, [sign up here](https://www.tradestation.com/))
@@ -22,28 +23,32 @@ Before we begin, make sure you have:
 5. Click "Create App"
 6. You'll receive:
    - Client ID
-   - Client Secret
+   - Client Secret (only for confidential clients)
    Keep these safe - you'll need them soon!
 
 ## Step 2: Setting Up Your Project 🛠️
 
 1. Create a new directory for your project:
+
 ```bash
 mkdir my-tradestation-app
 cd my-tradestation-app
 ```
 
-2. Initialize a new npm project:
+1. Initialize a new npm project:
+
 ```bash
 npm init -y
 ```
 
-3. Install the required packages:
+1. Install the required packages:
+
 ```bash
 npm install tradestation-api-ts dotenv typescript ts-node @types/node
 ```
 
-4. Create a TypeScript configuration file (`tsconfig.json`):
+1. Create a TypeScript configuration file (`tsconfig.json`):
+
 ```json
 {
   "compilerOptions": {
@@ -61,14 +66,16 @@ npm install tradestation-api-ts dotenv typescript ts-node @types/node
 ## Step 3: Setting Up Environment Variables ��
 
 1. Create a `.env` file in your project root:
+
 ```env
 CLIENT_ID=your_client_id
-CLIENT_SECRET=your_client_secret
+CLIENT_SECRET=your_client_secret # Optional for public clients
 REFRESH_TOKEN=your_refresh_token
 ENVIRONMENT=Simulation  # Use 'Simulation' for testing, 'Live' for real trading
 ```
 
 > 🔒 Security Tip: Never commit your `.env` file to version control! Add it to your `.gitignore`:
+
 ```bash
 echo ".env" >> .gitignore
 ```
@@ -80,6 +87,7 @@ TradeStation uses OAuth 2.0 with refresh tokens for authentication. To get a ref
 1. Use the TradeStation OAuth flow:
    - Use the [TradeStation OAuth documentation](https://api.tradestation.com/docs/fundamentals/authentication) for details
    - Or use our helper script to get an initial token:
+
    ```bash
    sh ./docs/getauthtoken.sh your_client_id your_client_secret
    ```
@@ -142,11 +150,13 @@ main();
 ## Step 6: Running Your Script 🏃‍♂️
 
 1. Run the script using ts-node:
+
 ```bash
 npx ts-node quickStart.ts
 ```
 
-2. You should see output similar to this:
+1. You should see output similar to this:
+
 ```
 Fetching symbol details for AAPL...
 
@@ -174,6 +184,7 @@ Volume: 23456789
 Now that you've got your first script running, here are some things you can try:
 
 1. **Stream Real-time Data**
+
 ```typescript
 const quoteStream = await client.marketData.streamQuotes(['AAPL']);
 quoteStream.on('data', (quote) => {
@@ -181,13 +192,15 @@ quoteStream.on('data', (quote) => {
 });
 ```
 
-2. **Get Account Information**
+1. **Get Account Information**
+
 ```typescript
 const accounts = await client.brokerage.getAccounts();
 console.log('Your accounts:', accounts);
 ```
 
-3. **Place a Test Order** (in Simulation environment)
+1. **Place a Test Order** (in Simulation environment)
+
 ```typescript
 const order = await client.orderExecution.placeOrder({
     AccountID: 'your_account_id',
@@ -238,4 +251,4 @@ const order = await client.orderExecution.placeOrder({
    - Close streams when you're done with them
    - Use `client.closeAllStreams()` in cleanup
 
-Happy coding! 🎉 
+Happy coding! 🎉

@@ -33,7 +33,7 @@ npm install tradestation-api-ts
 import { TradeStationClient } from 'tradestation-api-ts';
 
 // Initialize with environment variables
-// Automatically reads CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, and ENVIRONMENT from .env
+// Automatically reads CLIENT_ID, CLIENT_SECRET (optional), REFRESH_TOKEN, and ENVIRONMENT from .env
 const client = new TradeStationClient();
 
 // Or with explicit configuration
@@ -159,12 +159,12 @@ client.closeAllStreams();
 
 ```env
 CLIENT_ID=your_client_id
-CLIENT_SECRET=your_client_secret
+CLIENT_SECRET=your_client_secret # Optional for public clients
 REFRESH_TOKEN=your_refresh_token
 ENVIRONMENT=Simulation  # or 'Live'
 ```
 
-2. Initialize the client:
+1. Initialize the client:
 
 ```typescript
 import { TradeStationClient } from 'tradestation-api-ts';
@@ -184,23 +184,27 @@ quoteStream.on('data', (quote) => {
 ## Features
 
 ### 1. Request Client
+
 - Automatic token management
 - Configurable retry logic
 - Error handling
 - Request/response interceptors
 
 ### 2. Authentication
+
 - OAuth 2.0 implementation
 - Automatic token refresh
 - Simulation/Live environment support
 
 ### 3. Rate Limiter
+
 - Automatic rate limiting
 - Configurable limits
 - Queue management
 - Headers-based rate tracking
 
 ### 4. Market Data APIs
+
 - Real-time quotes
 - Historical bars
 - Option chains
@@ -208,6 +212,7 @@ quoteStream.on('data', (quote) => {
 - Symbol information
 
 ### 5. Brokerage APIs
+
 - Account management
 - Position tracking
 - Balance information
@@ -215,6 +220,7 @@ quoteStream.on('data', (quote) => {
 - Activity tracking
 
 ### 6. Order Execution APIs
+
 - Order placement
 - Order modification
 - Order cancellation
@@ -224,11 +230,13 @@ quoteStream.on('data', (quote) => {
 ## Local Development
 
 ### Prerequisites
+
 - Node.js (>=14.0.0)
 - npm or yarn
 - Git
 
 ### Clone and Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/mxcoppell/tradestation-api-ts.git
@@ -243,6 +251,7 @@ cp .env.sample .env
 ```
 
 ### Build
+
 ```bash
 # Build the library
 npm run build
@@ -255,6 +264,7 @@ npm run build:all
 ```
 
 ### Test
+
 ```bash
 # Run all tests
 npm test
@@ -267,6 +277,7 @@ npm run test:watch
 ```
 
 ### Run Examples
+
 The project includes a helper script to run examples:
 
 ```bash
@@ -281,6 +292,7 @@ The project includes a helper script to run examples:
 ```
 
 ### Development Workflow
+
 1. Make your changes in the `src` directory
 2. Add or update tests in `src/**/__tests__`
 3. Run tests to ensure everything works
@@ -342,4 +354,4 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ---
 
-**Disclaimer**: This is an unofficial wrapper for the TradeStation WebAPI. It is not affiliated with, maintained, authorized, or endorsed by TradeStation. 
+**Disclaimer**: This is an unofficial wrapper for the TradeStation WebAPI. It is not affiliated with, maintained, authorized, or endorsed by TradeStation.

@@ -7,7 +7,7 @@ export class TokenManager {
     private tokenExpiry: number | null = null;
     private refreshing: Promise<void> | null = null;
     private readonly axiosInstance: AxiosInstance;
-    private readonly config: Required<Pick<ClientConfig, 'clientId' | 'clientSecret'>> & Omit<ClientConfig, 'clientId' | 'clientSecret'>;
+    private readonly config: Required<Pick<ClientConfig, 'clientId'>> & Omit<ClientConfig, 'clientId'>;
     // 5 minutes in milliseconds
     private static readonly REFRESH_THRESHOLD = 5 * 60 * 1000;
 
@@ -15,11 +15,12 @@ export class TokenManager {
         const clientId = config?.clientId || process.env.CLIENT_ID;
         const clientSecret = config?.clientSecret || process.env.CLIENT_SECRET;
 
-        if (!clientId || !clientSecret) {
-            throw new Error('Client ID and Client Secret are required');
+        if (!clientId) {
+            throw new Error('Client ID is required');
         }
 
         this.config = {
+            ...config,
             clientId,
             clientSecret,
             maxConcurrentStreams: config?.maxConcurrentStreams,
@@ -83,9 +84,12 @@ export class TokenManager {
             const params = new URLSearchParams({
                 grant_type: 'refresh_token',
                 client_id: this.config.clientId,
-                client_secret: this.config.clientSecret,
                 refresh_token: refreshToken,
             });
+
+            if (this.config.clientSecret) {
+                params.append('client_secret', this.config.clientSecret);
+            }
 
             try {
                 const response = await this.axiosInstance.post<AuthResponse>('/oauth/token', params);

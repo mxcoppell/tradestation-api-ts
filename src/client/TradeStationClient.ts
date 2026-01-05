@@ -17,7 +17,7 @@ export class TradeStationClient {
      * Creates a new TradeStationClient instance
      * @param config Optional configuration object. If not provided, values will be read from environment variables
      * @example
-     * // Using environment variables (CLIENT_ID and CLIENT_SECRET must be set)
+     * // Using environment variables (CLIENT_ID must be set, CLIENT_SECRET is optional)
      * const client = new TradeStationClient({
      *   refresh_token: 'your_refresh_token',
      *   environment: 'Simulation' // or 'Live'

@@ -5,19 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-01-05
+
+### Changed
+
+- Made `clientSecret` optional in `TradeStationClient` configuration to support public clients (e.g., mobile or desktop apps) that do not use a client secret.
+
 ## [1.2.1] - 2025-03-15
 
 ### Enhanced
+
 - Added automatic reading of refresh token from environment variables
 - Client initialization now supports simpler syntax that reads all credentials from environment
 
 ## [1.2.0] - 2025-03-09
 
 ### Added
+
 - Support for refresh token authentication
 - Helper script for obtaining refresh tokens (`docs/getauthtoken.sh`)
 
 ### Changed
+
 - Updated authentication method from username/password to refresh token
 - Modified client initialization to use refresh tokens
 - Updated all examples to use refresh token authentication
@@ -26,17 +35,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Token manager now supports refresh token rotation
 
 ### Removed
+
 - Username/password authentication method
 - References to `.env.local` in favor of `.env`
 
 ## [1.1.0] - 2025-02-18
 
 ### Fixed
+
 - Fixed type errors in historical orders test
 - Improved test coverage across all services
 - Enhanced error handling in stream management
 
 ### Changed
+
 - Updated package dependencies to latest versions
 - Improved TypeScript type definitions
 - Enhanced documentation with more examples
@@ -44,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-02-18
 
 ### Added
+
 - Initial release of the TradeStation API TypeScript wrapper
 - Complete TypeScript implementation of TradeStation WebAPI v3
 - Comprehensive test coverage
@@ -51,23 +64,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example implementations for all API endpoints
 
 #### Authentication
+
 - OAuth 2.0 implementation with automatic token refresh
 - Environment-based configuration (Simulation/Live)
 - Secure credential management
 
 #### Request Client
+
 - Axios-based HTTP client with interceptors
 - Automatic retry logic
 - Comprehensive error handling
 - Request/response logging
 
 #### Rate Limiting
+
 - Automatic rate limit handling
 - Queue-based request management
 - Headers-based rate tracking
 - Configurable limits
 
 #### Market Data
+
 - Real-time quote streaming
 - Historical bar data
 - Option chain data
@@ -76,6 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Quote snapshots
 
 #### Brokerage
+
 - Account management
 - Position tracking
 - Balance information
@@ -83,6 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Activity monitoring
 
 #### Order Execution
+
 - Order placement
 - Order modification
 - Order cancellation
@@ -90,17 +109,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - OCO and bracket orders
 
 #### Streaming
+
 - WebSocket implementation
 - Event-based data handling
 - Automatic reconnection
 - Stream management
 
 #### Examples
+
 - Comprehensive example implementations
 - Helper script for running examples
 - Documentation for all examples
 
 #### Development
+
 - Complete TypeScript configuration
 - Jest test setup
 - ESLint configuration
@@ -108,18 +130,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI/CD
 
 ### Changed
+
 - N/A (Initial release)
 
 ### Deprecated
+
 - N/A (Initial release)
 
 ### Removed
+
 - N/A (Initial release)
 
 ### Fixed
+
 - N/A (Initial release)
 
 ### Security
+
 - Secure token management
 - Environment variable handling
-- API key protection 
+- API key protection

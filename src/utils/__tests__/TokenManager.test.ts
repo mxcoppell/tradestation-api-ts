@@ -215,5 +215,37 @@ describe('TokenManager', () => {
 
             await expect(tokenManagerWithoutRefreshToken.getValidAccessToken()).rejects.toThrow('No refresh token available');
         });
+
+        it('should refresh token successfully without clientSecret', async () => {
+            const configWithoutSecret: ClientConfig = {
+                clientId: 'test-client-id',
+                refresh_token: 'test-refresh-token',
+            };
+            const tokenManagerNoSecret = new TokenManager(configWithoutSecret);
+
+            const mockResponse: TokenResponse = {
+                data: {
+                    access_token: 'new_access_token',
+                    refresh_token: 'new_refresh_token',
+                    expires_in: 3600,
+                }
+            };
+
+            mockPost.mockResolvedValueOnce(mockResponse);
+
+            await tokenManagerNoSecret.refreshAccessToken();
+
+            expect(mockPost).toHaveBeenCalledWith(
+                '/oauth/token',
+                expect.any(URLSearchParams)
+            );
+
+            const callArgs = mockPost.mock.calls[0][1] as URLSearchParams;
+            expect(callArgs.get('client_id')).toBe('test-client-id');
+            expect(callArgs.has('client_secret')).toBe(false);
+            expect(callArgs.get('refresh_token')).toBe('test-refresh-token');
+
+            expect(tokenManagerNoSecret.hasValidToken()).toBe(true);
+        });
     });
-}); 
+});
