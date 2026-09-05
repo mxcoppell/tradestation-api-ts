@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-09-04
+
+### Security
+
+- Fixed 42 open Dependabot alerts by updating dependencies:
+  - **axios**: Updated from 1.13.2 to 1.20.0 (High) — resolves the full 1.13.x-1.18.0 advisory chain
+  - **follow-redirects**: Updated from 1.15.9 to 1.16.0 (Moderate, transitive via axios)
+  - **form-data**: Updated from 4.0.5 to 4.0.6 (High, transitive via axios)
+  - **@babel/core**: Updated from 7.26.9 to 7.29.7 (Low)
+  - **browserslist**: Updated from 4.24.4 to 4.28.9 (High, transitive via @babel/core)
+  - **@humanfs/node**: Updated from 0.16.7 to 0.16.8 (Moderate)
+  - **flatted**: Updated from 3.3.3 to 3.4.4 (High)
+  - **minimatch**: Updated from 3.1.2 to 3.1.5, 5.1.6 to 5.1.9, and 9.0.5 to 9.0.9 (High)
+  - **picomatch**: Updated from 2.3.1 to 2.3.2 and 4.0.3 to 4.0.7 (Moderate)
+  - **brace-expansion**: Updated from 1.1.12 to 1.1.18 and 2.0.2 to 2.1.4 (High)
+
 ## [1.3.1] - 2026-01-05
 
 ### Security
