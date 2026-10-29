@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4] - 2026-10-29
+
+### Security
+
+- Fixed open Dependabot alerts by updating dependencies:
+  - **brace-expansion**: Updated from 1.1.18 to 1.1.21 and 2.1.4 to 2.1.7 (Medium, transitive) — resolves GHSA-q2hr-2g5m-vwhr
+  - **follow-redirects**: Updated from 1.16.0 to 1.16.2 (High, transitive via axios) — resolves GHSA-q3jh-wrc6-jgq8 and GHSA-8r9p-f939-6h3c
+
 ## [1.3.3] - 2026-09-19
 
 ### Security
